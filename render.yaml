@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: coffee-shop-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: REDIS_URL
+        sync: false
+      - key: STAFF_API_TOKEN
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
