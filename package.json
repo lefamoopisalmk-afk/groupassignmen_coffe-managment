@@ -1,0 +1,18 @@
+{
+  "name": "groupassignmen-coffe-managment",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Coffee Shop Management full-stack web application",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c yellow,cyan \"npm:dev --workspace=server\" \"npm:dev --workspace=client\"",
+    "build": "npm run build --workspace=client",
+    "test": "npm run test --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
