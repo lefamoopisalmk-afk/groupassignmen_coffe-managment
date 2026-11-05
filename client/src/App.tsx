@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowDown, ArrowRight, ArrowUpRight, BadgeCheck, Bean, Check, ChevronDown, Clock3,
-  Coffee, Croissant, CupSoda, Leaf, LockKeyhole, Minus, Plus, Search, ShoppingBag,
+  Coffee, Croissant, CupSoda, Leaf, LockKeyhole, Minus, Pencil, Plus, Search, ShoppingBag,
   Sparkles, Trash2, Users, X,
 } from 'lucide-react';
 import { api, type DailySummary, type MenuCategory, type MenuItem, type OrderStatus, type PublicOrder, type StaffOrder } from './api';
@@ -49,6 +49,7 @@ export default function App() {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [draft, setDraft] = useState<MenuDraft>(emptyDraft);
   const [activeStaffTab, setActiveStaffTab] = useState<'orders' | 'menu'>('orders');
+  const receiptRef = useRef<HTMLElement>(null);
 
   const loadMenu = async () => {
     setMenuLoading(true);
@@ -63,6 +64,9 @@ export default function App() {
   };
 
   useEffect(() => { void loadMenu(); }, []);
+  useEffect(() => {
+    if (receipt) receiptRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [receipt]);
 
   const visibleMenu = useMemo(() => menu.filter((item) => {
     const matchesCategory = category === 'All' || item.category === category;
@@ -95,6 +99,7 @@ export default function App() {
         items: cart.map(({ item, quantity }) => ({ menuItemId: item.id, quantity })),
       });
       setReceipt(order);
+      setLookupId(order.id);
       setCart([]);
       setCustomerName('');
       setNotes('');
@@ -228,7 +233,7 @@ export default function App() {
             </section>
 
             {receipt && (
-              <section className="receipt-banner" aria-live="polite">
+              <section className="receipt-banner" aria-live="polite" ref={receiptRef}>
                 <span className="receipt-icon"><BadgeCheck size={23} /></span>
                 <div><small>ORDER CONFIRMED</small><h2>You're on our list.</h2><p>Order <b>#{receipt.id}</b> · {money(receipt.total)} · We’ll get right to it.</p></div>
                 <div className="receipt-status"><span className="status-dot pending" /> {receipt.status}</div>
@@ -239,13 +244,13 @@ export default function App() {
             <section id="menu" className="menu-section">
               <div className="section-heading">
                 <div><div className="eyebrow"><span className="eyebrow-line" /> THE GOOD STUFF</div><h2>A menu worth<br className="mobile-break" /> <em>waking up for.</em></h2></div>
-                <div className="menu-aside"><span>01 — 08</span><p>Small batch. Big heart.<br />Always made fresh.</p></div>
+                <div className="menu-aside"><span>{String(visibleMenu.length).padStart(2, '0')} {visibleMenu.length === 1 ? 'ITEM' : 'ITEMS'}</span><p>Small batch. Big heart.<br />Always made fresh.</p></div>
               </div>
               <div className="menu-toolbar">
-                <div className="category-tabs" role="tablist" aria-label="Menu categories">
-                  {categories.map((name) => <button key={name} className={category === name ? 'category-tab selected' : 'category-tab'} onClick={() => setCategory(name)}>{name}</button>)}
+                <div className="category-tabs" role="group" aria-label="Menu categories">
+                  {categories.map((name) => <button key={name} aria-pressed={category === name} className={category === name ? 'category-tab selected' : 'category-tab'} onClick={() => setCategory(name)}>{name}</button>)}
                 </div>
-                <label className="search-field"><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Find your favorite" /><span>⌘ K</span></label>
+                <label className="search-field"><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Find your favorite" aria-label="Search the menu" /></label>
               </div>
               {menuLoading ? <div className="empty-state"><span className="loader" /> Loading today's menu...</div> : (
                 <div className="menu-grid">
@@ -256,7 +261,7 @@ export default function App() {
                       <article className={`menu-card ${!item.available ? 'unavailable' : ''}`} key={item.id}>
                         <div className={`product-art art-${index % 8}`}>
                           <span className="product-category"><Icon size={13} /> {item.category}</span>
-                          <span className="product-number">0{index + 1}</span>
+                          <span className="product-number">{String(index + 1).padStart(2, '0')}</span>
                           <div className="product-illustration" aria-hidden="true">
                             {item.category === 'Coffee' ? <div className="tiny-cup"><span /></div> : item.category === 'Tea' ? <div className="tea-glass"><span /></div> : item.category === 'Pastry' ? <div className="pastry-shape"><i /><i /><i /></div> : <div className="food-plate"><span /></div>}
                           </div>
@@ -327,7 +332,7 @@ export default function App() {
                     <label className="availability-check"><input type="checkbox" checked={draft.available} onChange={(event) => setDraft({ ...draft, available: event.target.checked })} /> Available to order</label>
                     <div className="editor-actions"><button className="primary-button" disabled={staffBusy}>{editingItem ? 'Save changes' : 'Add to menu'} <Plus size={15} /></button>{editingItem && <button type="button" className="text-link" onClick={() => { setEditingItem(null); setDraft(emptyDraft); }}>Cancel</button>}</div>
                   </form>
-                  <div className="admin-items"><div className="eyebrow">CURRENT MENU · {menu.length} ITEMS</div>{menu.map((item) => <div className="admin-menu-item" key={item.id}><span className="admin-item-icon"><Coffee size={17} /></span><div><strong>{item.name}</strong><small>{item.category} · {money(item.price)} · {item.available ? 'Available' : 'Sold out'}</small></div><button className="icon-button" aria-label={`Edit ${item.name}`} onClick={() => { setEditingItem(item); setDraft({ name: item.name, description: item.description, category: item.category, price: item.price, available: item.available }); }}><Sparkles size={16} /></button><button className="icon-button danger" aria-label={`Delete ${item.name}`} onClick={() => void removeMenuItem(item)}><Trash2 size={16} /></button></div>)}</div>
+                  <div className="admin-items"><div className="eyebrow">CURRENT MENU · {menu.length} ITEMS</div>{menu.map((item) => <div className="admin-menu-item" key={item.id}><span className="admin-item-icon"><Coffee size={17} /></span><div><strong>{item.name}</strong><small>{item.category} · {money(item.price)} · {item.available ? 'Available' : 'Sold out'}</small></div><button className="icon-button" aria-label={`Edit ${item.name}`} onClick={() => { setEditingItem(item); setDraft({ name: item.name, description: item.description, category: item.category, price: item.price, available: item.available }); }}><Pencil size={16} /></button><button className="icon-button danger" aria-label={`Delete ${item.name}`} onClick={() => void removeMenuItem(item)}><Trash2 size={16} /></button></div>)}</div>
                 </section>
               )}
               <button className="sign-out" onClick={() => { setStaffReady(false); setStaffToken(''); setStaffOrders([]); setSummary(null); }}>Sign out of staff dashboard</button>

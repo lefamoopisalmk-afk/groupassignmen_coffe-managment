@@ -48,7 +48,12 @@ async function request<T>(path: string, options: RequestInit = {}, token?: strin
   if (options.body) headers.set('content-type', 'application/json');
   if (token) headers.set('authorization', `Bearer ${token}`);
 
-  const response = await fetch(`${API_URL}/api${path}`, { ...options, headers });
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}/api${path}`, { ...options, headers });
+  } catch {
+    throw new Error('Could not reach the coffee shop server. Please try again in a moment.');
+  }
   if (!response.ok) {
     const body = await response.json().catch(() => null) as { error?: string } | null;
     throw new Error(body?.error ?? `Request failed (${response.status})`);
