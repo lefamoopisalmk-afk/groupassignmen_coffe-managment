@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { errorHandler, HttpError } from './errors.js';
 import { menuInput, orderInput, statusInput } from './schemas.js';
 
@@ -14,15 +14,22 @@ const STARTER_MENU = [
   ['Butter Croissant', 'Flaky, golden pastry baked fresh every morning.', 'Pastry', 3.1],
   ['Almond Morning Bun', 'Buttery laminated dough rolled in toasted almonds.', 'Pastry', 3.8],
   ['Avocado Toast', 'Sourdough toast, smashed avocado, lemon and chilli flakes.', 'Food', 7.5],
-].map(([name, description, category, price]) => ({
+].map(([name, description, category, price], index) => ({
   id: randomUUID(),
   name,
   description,
   category,
   price,
   available: true,
-  createdAt: new Date().toISOString(),
+  // One millisecond apart so the menu sorts in the order listed above.
+  createdAt: new Date(Date.now() + index).toISOString(),
 }));
+
+const digest = (value) => createHash('sha256').update(value).digest();
+const parseOrigins = (value) => value
+  .split(',')
+  .map((origin) => origin.trim().replace(/\/$/, ''))
+  .filter(Boolean);
 
 function publicOrder(order) {
   return {
@@ -44,7 +51,7 @@ export function createApp({ store, staffToken, corsOrigin }) {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
-  app.use(cors({ origin: corsOrigin.split(',').map((origin) => origin.trim()) }));
+  app.use(cors({ origin: parseOrigins(corsOrigin) }));
   app.use(express.json({ limit: '32kb' }));
   app.use('/api', rateLimit({
     windowMs: 60_000,
@@ -55,19 +62,31 @@ export function createApp({ store, staffToken, corsOrigin }) {
 
   const requireStaff = (request, _response, next) => {
     if (!staffToken) return next(new HttpError(503, 'Staff authentication is not configured'));
-    if (request.get('authorization') !== `Bearer ${staffToken}`) {
+    const supplied = digest(request.get('authorization') ?? '');
+    if (!timingSafeEqual(supplied, digest(`Bearer ${staffToken}`))) {
       return next(new HttpError(401, 'Staff authentication required'));
     }
     return next();
   };
 
+  app.get('/', (_request, response) => {
+    response.json({ name: 'Coffee Shop Management API', health: '/api/health', menu: '/api/menu' });
+  });
+
   app.get('/api/health', async (_request, response) => {
-    await store.healthCheck();
-    response.json({ status: 'ok', database: 'connected' });
+    try {
+      await store.healthCheck();
+      response.json({ status: 'ok', database: 'connected' });
+    } catch (error) {
+      console.error('Health check failed:', error);
+      response.status(503).json({ status: 'unavailable', database: 'disconnected' });
+    }
   });
 
   app.get('/api/menu', async (_request, response) => {
-    response.json(await store.getMenuItems());
+    const items = await store.getMenuItems();
+    items.sort((a, b) => (a.createdAt ?? '').localeCompare(b.createdAt ?? '') || a.name.localeCompare(b.name));
+    response.json(items);
   });
 
   app.get('/api/menu/:id', async (request, response) => {
