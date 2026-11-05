@@ -116,6 +116,59 @@ test('orders calculate totals from stored prices and expose only a public receip
   assert.equal((await update.json()).status, 'Ready');
 });
 
+test('menu is returned in a stable order regardless of storage order', async () => {
+  const older = { id: randomUUID(), name: 'Zebra Blend', description: 'Older item.', category: 'Coffee', price: 3, available: true, createdAt: '2020-01-01T00:00:00.000Z' };
+  const newer = { id: randomUUID(), name: 'Apple Tart', description: 'Newer item.', category: 'Pastry', price: 3, available: true, createdAt: '2020-01-02T00:00:00.000Z' };
+  await store.saveMenuItem(newer);
+  await store.saveMenuItem(older);
+  const names = (await (await fetch(`${baseUrl}/api/menu`)).json()).map((item) => item.name);
+  assert.ok(names.indexOf('Zebra Blend') < names.indexOf('Apple Tart'));
+});
+
+test('orders are rejected for unknown or unavailable items and invalid statuses', async () => {
+  const soldOut = await store.saveMenuItem({ id: randomUUID(), name: 'Sold Out Scone', description: 'Gone.', category: 'Pastry', price: 2, available: false });
+  const place = (menuItemId) => fetch(`${baseUrl}/api/orders`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ customerName: 'Sam', items: [{ menuItemId, quantity: 1 }] }),
+  });
+  assert.equal((await place(soldOut.id)).status, 409);
+  assert.equal((await place(randomUUID())).status, 400);
+
+  const available = await store.saveMenuItem({ id: randomUUID(), name: 'Filter Coffee', description: 'Hot.', category: 'Coffee', price: 2, available: true });
+  const receipt = await (await place(available.id)).json();
+  const badStatus = await fetch(`${baseUrl}/api/orders/${receipt.id}/status`, {
+    method: 'PATCH',
+    headers: { authorization: `Bearer ${staffToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ status: 'Burnt' }),
+  });
+  assert.equal(badStatus.status, 400);
+});
+
+test('daily summary counts today\'s orders and requires staff access', async () => {
+  assert.equal((await fetch(`${baseUrl}/api/orders/summary/daily`)).status, 401);
+  const summary = await (await fetch(`${baseUrl}/api/orders/summary/daily`, {
+    headers: { authorization: `Bearer ${staffToken}` },
+  })).json();
+  assert.ok(summary.orderCount >= 1);
+  assert.equal(Object.values(summary.byStatus).reduce((sum, count) => sum + count, 0), summary.orderCount);
+});
+
+test('health reports 503 when the database is unreachable', async () => {
+  const original = store.healthCheck;
+  const consoleError = console.error;
+  console.error = () => {};
+  store.healthCheck = async () => { throw new Error('connection lost'); };
+  try {
+    const health = await fetch(`${baseUrl}/api/health`);
+    assert.equal(health.status, 503);
+    assert.deepEqual(await health.json(), { status: 'unavailable', database: 'disconnected' });
+  } finally {
+    store.healthCheck = original;
+    console.error = consoleError;
+  }
+});
+
 test('health endpoint responds and unknown routes return JSON 404', async () => {
   const health = await fetch(`${baseUrl}/api/health`);
   assert.deepEqual(await health.json(), { status: 'ok', database: 'connected' });

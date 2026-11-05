@@ -6,7 +6,9 @@ import { createStore } from './store.js';
 const redisUrl = process.env.REDIS_URL;
 if (!redisUrl) throw new Error('REDIS_URL must be configured');
 
-const redis = createClient({ url: redisUrl });
+// Fail requests immediately during an outage instead of queueing them, so
+// /api/health can report the problem rather than hang.
+const redis = createClient({ url: redisUrl, disableOfflineQueue: true });
 redis.on('error', (error) => console.error('Redis connection error:', error));
 await redis.connect();
 
