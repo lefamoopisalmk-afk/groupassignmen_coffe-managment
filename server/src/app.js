@@ -5,15 +5,16 @@ import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { errorHandler, HttpError } from './errors.js';
 import { menuInput, orderInput, statusInput } from './schemas.js';
 
+// Prices are in Lesotho maloti (M).
 const STARTER_MENU = [
-  ['House Espresso', 'Rich, balanced espresso with a velvety crema.', 'Coffee', 2.8],
-  ['Oat Milk Latte', 'Double espresso with silky steamed oat milk.', 'Coffee', 4.5],
-  ['Honey Cinnamon Cappuccino', 'A classic cappuccino with local honey and cinnamon.', 'Coffee', 4.2],
-  ['Iced Vanilla Cold Brew', 'Slow-steeped coffee, vanilla and a splash of cream.', 'Coffee', 4.7],
-  ['Jasmine Green Tea', 'Fragrant loose-leaf green tea, gently brewed.', 'Tea', 3.2],
-  ['Butter Croissant', 'Flaky, golden pastry baked fresh every morning.', 'Pastry', 3.1],
-  ['Almond Morning Bun', 'Buttery laminated dough rolled in toasted almonds.', 'Pastry', 3.8],
-  ['Avocado Toast', 'Sourdough toast, smashed avocado, lemon and chilli flakes.', 'Food', 7.5],
+  ['House Espresso', 'Rich, balanced espresso with a velvety crema.', 'Coffee', 28],
+  ['Oat Milk Latte', 'Double espresso with silky steamed oat milk.', 'Coffee', 45],
+  ['Honey Cinnamon Cappuccino', 'A classic cappuccino with local honey and cinnamon.', 'Coffee', 42],
+  ['Iced Vanilla Cold Brew', 'Slow-steeped coffee, vanilla and a splash of cream.', 'Coffee', 47],
+  ['Jasmine Green Tea', 'Fragrant loose-leaf green tea, gently brewed.', 'Tea', 32],
+  ['Butter Croissant', 'Flaky, golden pastry baked fresh every morning.', 'Pastry', 31],
+  ['Almond Morning Bun', 'Buttery laminated dough rolled in toasted almonds.', 'Pastry', 38],
+  ['Avocado Toast', 'Sourdough toast, smashed avocado, lemon and chilli flakes.', 'Food', 75],
 ].map(([name, description, category, price], index) => ({
   id: randomUUID(),
   name,
