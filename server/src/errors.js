@@ -1,3 +1,5 @@
+import { ClientClosedError, ClientOfflineError } from 'redis';
+
 export class HttpError extends Error {
   constructor(status, message) {
     super(message);
@@ -18,6 +20,10 @@ export function errorHandler(error, _request, response, _next) {
         message,
       })),
     });
+  }
+
+  if (error instanceof ClientOfflineError || error instanceof ClientClosedError) {
+    return response.status(503).json({ error: 'The database is unavailable. Please try again shortly.' });
   }
 
   console.error('Unhandled API error:', error);
