@@ -9,7 +9,7 @@ BIWA2110 Web Application Development: Group Assignment.
 | Part | URL |
 | --- | --- |
 | GitHub repository | <https://github.com/lefamoopisalmk-afk/groupassignmen_coffe-managment> |
-| React frontend (Netlify) | <https://netlify-deploy-3a6a60.netlify.app> |
+| React frontend (Netlify) | <https://daybreakcoffee.netlify.app/> |
 | Express backend (Render) | <https://coffee-shop-api-ozjb.onrender.com> |
 | Backend health check | <https://coffee-shop-api-ozjb.onrender.com/api/health> |
 
