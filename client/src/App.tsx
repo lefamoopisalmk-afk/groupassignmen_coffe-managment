@@ -288,7 +288,6 @@ export default function App() {
       <div className="app-shell">
         <header className={view === 'menu' ? 'site-header over-hero' : 'site-header'}>
           <button className="brand" onClick={() => goToSection('top')} aria-label="Daybreak Coffee, go to the top of the shop page">{brand}</button>
-          <button className="pill-button small" onClick={() => goToSection('menu')}>Order now <ArrowRight size={16} /></button>
         </header>
 
         {message && (
@@ -308,7 +307,10 @@ export default function App() {
                   <h1>Good things<br />are <em>brewing.</em></h1>
                   <p>Thoughtful coffee, fresh-from-the-oven treats, and a warm welcome. Made slowly, enjoyed whenever.</p>
                   <div className="hero-actions">
-                    <button className="pill-button dark" onClick={() => goToSection('menu')}>Explore the menu <ArrowRight size={17} /></button>
+                    <div className="hero-buttons">
+                      <button className="pill-button dark" onClick={() => goToSection('menu')}>Explore the menu <ArrowRight size={17} /></button>
+                      <button className="pill-button" onClick={() => goToSection('menu')}>Order now <ArrowRight size={17} /></button>
+                    </div>
                     <button className="ghost-link" onClick={() => goToSection('track')}><span><Search size={16} /></span> Track an order</button>
                   </div>
                   <dl className="hero-stats">

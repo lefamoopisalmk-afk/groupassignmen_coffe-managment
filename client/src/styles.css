@@ -45,7 +45,6 @@ h2 em, h1 em { font-weight: 500; }
 .pill-button { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 24px; border: 0; border-radius: 999px; color: var(--espresso); background: var(--caramel); font-size: 15px; font-weight: 600; white-space: nowrap; transition: background .2s, transform .2s; }
 .pill-button:hover:not(:disabled) { background: var(--caramel-dark); transform: translateY(-1px); }
 .pill-button:disabled { opacity: .65; }
-.pill-button.small { min-height: 44px; padding: 0 20px; font-size: 14px; }
 .pill-button.dark { color: var(--on-dark); background: var(--espresso); }
 .pill-button.dark:hover:not(:disabled) { background: var(--espresso-soft); }
 .pill-button.brown { color: #fff; background: var(--brown); }
@@ -75,7 +74,8 @@ h2 em, h1 em { font-weight: 500; }
 .hero h1 { max-width: 560px; margin: 16px 0 18px; color: var(--espresso); font: 500 clamp(52px, 6.6vw, 88px)/1 var(--serif); letter-spacing: -2px; }
 .hero h1 em { color: var(--brown); font-style: normal; }
 .hero-copy > p { max-width: 430px; color: var(--muted); font-size: 18px; }
-.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; margin: 30px 0 42px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px; margin: 30px 0 42px; }
+.hero-buttons { display: inline-grid; gap: 12px; }
 .ghost-link { min-height: 44px; display: inline-flex; align-items: center; gap: 12px; border: 0; padding: 0; background: transparent; font-size: 15px; font-weight: 600; }
 .ghost-link span { width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--espresso); border-radius: 50%; transition: color .2s, background .2s; }
 .ghost-link:hover span { color: var(--on-dark); background: var(--espresso); }
