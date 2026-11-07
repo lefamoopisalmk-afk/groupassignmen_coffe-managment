@@ -6,7 +6,7 @@ This walks through the three actions the assignment asks to be demonstrated: add
 
 ## 1. Add a menu item (staff)
 
-1. Open the website and select **Staff**.
+1. Open <https://netlify-deploy-3a6a60.netlify.app> and select **Staff** in the navigation bar.
 2. Enter the staff token and select **Open dashboard**.
 3. Open **Menu management**.
 4. Fill in the name, description, category and price, then select **Add to menu**.
@@ -23,8 +23,8 @@ The new item appears in the current menu list. The browser sends `POST /api/menu
 
    ![New item on the customer menu](screenshots/demo-2a-new-item-on-customer-menu.png)
 
-2. Select **Add to order** on the new item and any other item.
-3. Select **Your order**, and change a quantity with **+** or **-**.
+2. Select the **+** button on the new item and on any other item.
+3. Select **Order** in the navigation bar, and change a quantity with **+** or **-**.
 4. Enter a name and optional note, then select **Place my order**.
 
    ![Cart and checkout](screenshots/demo-2b-cart-and-checkout.png)
@@ -43,7 +43,7 @@ The new item appears in the current menu list. The browser sends `POST /api/menu
 
    ![Order status updated to Ready](screenshots/demo-3b-status-updated-to-ready.png)
 
-3. Select **Back to the shop**, and enter the order number under **Follow your coffee**. The customer sees the new status.
+3. Select **Track** in the navigation bar, and enter the order number under **Follow your coffee**. The customer sees the new status.
 
    ![Customer order status lookup](screenshots/04-customer-order-status-lookup.png)
 
@@ -52,3 +52,5 @@ The new item appears in the current menu list. The browser sends `POST /api/menu
 1. In the Render dashboard, select **Manual Deploy > Restart service** (or redeploy) and wait for it to come back.
 2. Reload the website. The new menu item, the order and its status are all still there.
 3. Show the stored records in the Upstash **Data Browser**, or run `npm run records` from the `server` folder.
+
+   ![Records in the Upstash Data Browser](screenshots/07-database-records-upstash.jpg)

@@ -9,9 +9,9 @@ BIWA2110 Web Application Development: Group Assignment.
 | Part | URL |
 | --- | --- |
 | GitHub repository | <https://github.com/lefamoopisalmk-afk/groupassignmen_coffe-managment> |
-| React frontend (Netlify) | _add after deployment_ |
-| Express backend (Render) | _add after deployment_ |
-| Backend health check | _backend URL_ + `/api/health` |
+| React frontend (Netlify) | <https://netlify-deploy-3a6a60.netlify.app> |
+| Express backend (Render) | <https://coffee-shop-api-ozjb.onrender.com> |
+| Backend health check | <https://coffee-shop-api-ozjb.onrender.com/api/health> |
 
 The backend runs on Render's free plan, which sleeps when idle, so the first request after a quiet period can take about a minute. Open the health check first before a demonstration.
 
@@ -19,7 +19,7 @@ The backend runs on Render's free plan, which sleeps when idle, so the first req
 
 **Customers**
 
-- Browse coffee, tea, pastries and food, with each item's name, description, price and availability.
+- Browse coffee, tea, pastries and food, with each item's name, description, availability and price in Lesotho maloti (M).
 - Filter by category and search by name.
 - Add items to a cart and change quantities.
 - Place an order with a name and optional notes, then receive a confirmation and unique order number.
@@ -43,7 +43,7 @@ The backend runs on Render's free plan, which sleeps when idle, so the first req
 
 | Layer | Technology | Hosting |
 | --- | --- | --- |
-| Frontend | React 19, TypeScript, Vite, Fetch API, lucide-react | Netlify |
+| Frontend | React 19, TypeScript, Vite, Fetch API, Framer Motion, lucide-react | Netlify |
 | Backend | Node.js, Express 5, Zod, cors, express-rate-limit | Render |
 | Database | Redis (key-value NoSQL) through the official `redis` client | Upstash |
 | Testing | Node.js built-in test runner | |
@@ -55,6 +55,8 @@ The backend runs on Render's free plan, which sleeps when idle, so the first req
 client/           React frontend
   src/api.ts      All Fetch API calls
   src/App.tsx     Customer interface and staff dashboard
+  src/components/ui/floating-nav.tsx  Navigation bar
+  public/images/  Photos
 server/           Express REST API
   src/app.js      Routes, authentication and error flow
   src/store.js    Redis key-value storage
@@ -209,7 +211,37 @@ See the [demonstration guide](docs/DEMO.md) for the full add-item, place-order a
 | --- | --- | --- |
 | ![Customer menu](docs/screenshots/02-customer-menu.png) | ![Order confirmation](docs/screenshots/demo-2c-order-confirmation.png) | ![Staff dashboard](docs/screenshots/demo-3b-status-updated-to-ready.png) |
 
-These images use sample data from a local test run.
+The menu image is from the live site. The order and staff images use sample data from a local test run.
+
+Stored records in the live Upstash database:
+
+![Records in the Upstash Data Browser](docs/screenshots/07-database-records-upstash.jpg)
+
+Live backend health check:
+
+![Live health check](docs/screenshots/06-api-health-live.png)
+
+## Photo credits
+
+The photos in `client/public/images` are free to use under the [Unsplash License](https://unsplash.com/license).
+
+| File | Source |
+| --- | --- |
+| `hero-cafe.jpg` | <https://images.unsplash.com/photo-1469631423273-6995642a6a40> |
+| `espresso.jpg` | <https://images.unsplash.com/photo-1579992357154-faf4bde95b3d> |
+| `oat-latte.jpg` | <https://images.unsplash.com/photo-1760163178873-7644a924519e> |
+| `cappuccino.jpg` | <https://images.unsplash.com/photo-1506372023823-741c83b836fe> |
+| `cold-brew.jpg` | <https://images.unsplash.com/photo-1461023058943-07fcbe16d735> |
+| `green-tea.jpg` | <https://images.unsplash.com/photo-1615227875116-ae28a77814fb> |
+| `croissant.jpg` | <https://images.unsplash.com/photo-1681218079567-35aef7c8e7e4> |
+| `morning-bun.jpg` | <https://images.unsplash.com/photo-1645995575875-ea6511c9d127> |
+| `avocado-toast.jpg` | <https://images.unsplash.com/photo-1783307525039-b92506474dc8> |
+| `story-table.jpg` | <https://images.unsplash.com/photo-1558210834-473f430c09ac> |
+| `portafilter.jpg` | <https://images.unsplash.com/photo-1553292218-4892c2e7e1ae> |
+| `pastries.jpg` | <https://images.unsplash.com/photo-1623334044303-241021148842> |
+| `visit-bar.jpg` | <https://images.unsplash.com/photo-1551887196-72e32bfc7bf3> |
+| `latte-croissants.jpg` | <https://images.unsplash.com/photo-1763647872237-c76e660cf38b> |
+| `beans.jpg` | <https://images.unsplash.com/photo-1783926014847-748a8074eb38> |
 
 ## Contributions
 
