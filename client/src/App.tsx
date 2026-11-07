@@ -308,8 +308,8 @@ export default function App() {
                   <p>Thoughtful coffee, fresh-from-the-oven treats, and a warm welcome. Made slowly, enjoyed whenever.</p>
                   <div className="hero-actions">
                     <div className="hero-buttons">
-                      <button className="pill-button dark" onClick={() => goToSection('menu')}>Explore the menu <ArrowRight size={17} /></button>
-                      <button className="pill-button" onClick={() => goToSection('menu')}>Order now <ArrowRight size={17} /></button>
+                      <button className="pill-button dark" onClick={() => goToSection('menu')}>Explore menu <ArrowRight size={17} /></button>
+                      <button className="pill-button" onClick={() => goToSection('menu')}>Order now</button>
                     </div>
                     <button className="ghost-link" onClick={() => goToSection('track')}><span><Search size={16} /></span> Track an order</button>
                   </div>
