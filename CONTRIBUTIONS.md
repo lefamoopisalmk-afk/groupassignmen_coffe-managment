@@ -25,11 +25,3 @@
 | Documentation | README, demonstration guide and screenshots | Kibiti Asanda |
 | GitHub management | Repository, branches and reviewing changes | Refuoe Lechesa |
 
-## Tools and assistance
-
-| Tool | How it was used |
-| --- | --- |
-| GitHub Copilot (AI assistant) | On 2026-11-05: co-authored the first commit, which built the application, and the commit that ignores generated TypeScript files. |
-| Claude Code (AI assistant) | On 2026-11-05: reviewed the project against the brief; fixed menu ordering, the health check response and smaller interface issues; added API tests and a database record viewer; ran end-to-end checks; captured the screenshots; and drafted the README and demonstration guide. |
-| Claude Code (AI assistant) | On 2026-11-07: restyled the website from templates the group chose; adapted the navigation bar component the group supplied; changed prices to Lesotho maloti; added the photos; fixed the backend so it starts when the database is unavailable; helped find and fix the deployment problems; retook the screenshots; and added the live addresses to the README. |
-| Claude Code (AI assistant) | On 2026-11-10: found why the renamed website could not reach the backend, and updated the website address in the README and demonstration guide. |
