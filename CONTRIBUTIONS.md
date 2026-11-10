@@ -11,7 +11,7 @@
 | --- | --- | --- |
 | _Lefa_ | _Moopisa_ | _Front-end_ |
 | _Kibiti_ | _Asanda_ | _Researcher_ |
-| _Name_ | _Number_ | _Role_ |
+| _Refuoe_ | _Lechesa_ | _Database manager_ |
 
 ## Contribution by project area
 
