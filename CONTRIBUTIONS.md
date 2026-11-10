@@ -28,17 +28,3 @@ Enter the member or members responsible for each area.
 | Deployment | Render, Netlify and database setup (`render.yaml`, `client/netlify.toml`) | _Name_ |
 | Documentation | README, demonstration guide and screenshots | _Name_ |
 | GitHub management | Repository, branches and reviewing changes | _Name_ |
-
-## Individual work log
-
-Each member records their own work and links their commits or pull requests.
-
-| Member | Contribution | Date | Commit or pull request |
-| --- | --- | --- | --- |
-| _Name_ | _Describe contribution_ | _YYYY-MM-DD_ | _Link_ |
-
-## Tools and assistance
-
-| Tool | How it was used |
-| --- | --- |
-| Claude Code (AI assistant) | On 2026-11-05: reviewed the project against the brief; fixed menu ordering, the health check response and smaller interface issues; added API tests and a database record viewer; ran end-to-end checks; captured the screenshots; and drafted the README and demonstration guide. These changes are marked in the commit history. |
