@@ -9,8 +9,8 @@
 
 | Member name | Student number | Role |
 | --- | --- | --- |
-| _Name_ | _Number_ | _Role_ |
-| _Name_ | _Number_ | _Role_ |
+| _Lefa_ | _Moopisa_ | _Front-end_ |
+| _Kibiti_ | _Asanda_ | _Researcher_ |
 | _Name_ | _Number_ | _Role_ |
 
 ## Contribution by project area
